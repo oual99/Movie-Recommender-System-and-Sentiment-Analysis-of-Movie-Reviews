@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 import pandas as pd
 import bs4 as bs
@@ -11,12 +10,14 @@ import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import pickle
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 # nltk.download('stopwords')
 # nltk.download('wordnet')
 
 app = Flask(__name__)
 data_movie = pd.read_csv("data_movies_final.csv")
-
+top_movies = pd.read_csv("topMovies.csv")
 
 ################################# collaborative part ############################
 with open('collaborative\decomposed_matrix.npy', 'rb') as f:
@@ -101,6 +102,25 @@ def get_recommend_contenantBased(id):
     # Return the top 15 most similar movies
     return rank_data['id']
 
+
+def get_recommend_plus(x, id):
+    x['casts'] = get_name(x['casts'])
+    x['Director'] = get_director(x['Director'])
+    x = create_soup(x)
+    x = str.lower(x).replace(",", "")
+    count = CountVectorizer(stop_words='english')
+    count_matrix = count.fit_transform(top_movies["soup"].append(pd.Series(x)))
+    sim = cosine_similarity(count_matrix[-1], count_matrix[0:-1])
+    sim = pd.Series(sim[0], index=[i for i in top_movies.index])
+    buts = top_movies.loc[sim.sort_values(ascending=False)[0:13].index.to_list()][[
+        "id", "score"]].sort_values(by=["score"], ascending=False)
+    try:
+        buts = buts.drop(buts[buts.id == id].index)
+    except:
+        pass
+
+    return buts['id'][0:12]
+
 ################################ popular ####################################
 
 
@@ -108,8 +128,6 @@ def popular_movie():
     temp = data_movie[["id", "score"]].sort_values(
         by=["score"], ascending=False)
     return temp["id"]
-
-
 
 
 @app.route("/")
@@ -146,6 +164,27 @@ def list_movies():
     return render_template('home.html', detail=None, list_movie=reslt, home=0)
 
 
+def get_name(data):
+    j = 0
+    temp = ""
+    for k, i in enumerate(data):
+        temp += j*" , "+i["cast_name"].replace(" ", "")
+        j += 1
+        if(j > 1):
+            j = 1
+        if(k > 1):
+            break
+    return temp
+
+
+def get_director(data):
+    data = data.split(",")
+    temp = ""
+    for i in data:
+        temp += i.replace(" ", "")
+    return temp
+
+
 def sentence(data):
     j = 0
     temp = ""
@@ -155,6 +194,11 @@ def sentence(data):
         if(j > 1):
             j = 1
     return temp
+
+
+def create_soup(x):
+    return x['casts'] + ' ' + x['casts'].split(",")[0] + ' ' + x['original_language'] + ' ' + x["Director"] +\
+        ' ' + x['genre'] + ' ' + x['original_language']
 
 
 @app.route("/movie", methods=["GET", "POST"])
@@ -180,6 +224,7 @@ def movie():
 
     detail["spoken languages"] = sentence(data_json["spoken_languages"])
     detail["genre"] = sentence(data_json["genres"])
+    detail["original_language"] = data_json["original_language"]
     detail['production companies'] = sentence(
         data_json["production_companies"])
     detail["production countries"] = sentence(
@@ -210,7 +255,7 @@ def movie():
     ########################################## get recommend collaborative ########################
     try:
         movies_recommended = get_recommend_collabotive(str(button))
-    
+
         movies = []
         for i in movies_recommended:
             url = "https://api.themoviedb.org/3/movie/" + \
@@ -244,7 +289,7 @@ def movie():
     ######################################### get recommend contenant Based ######################
     try:
         movies_recommended = get_recommend_contenantBased(str(button))
-       
+
         movies = []
         for i in movies_recommended:
             url = "https://api.themoviedb.org/3/movie/" + \
@@ -259,7 +304,22 @@ def movie():
             movies.append(movie)
         detail["contenantBased_recommender"] = movies
     except:
-        detail["contenantBased_recommender"] = None
+        ####################################### mise a jour #####################################
+        movies_recommended = get_recommend_plus(detail.copy(), str(button))
+        movies = []
+        for i in movies_recommended:
+            url = "https://api.themoviedb.org/3/movie/" + \
+                str(i)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+            response = urlopen(url)
+            data_json = json.loads(response.read())
+            movie = {
+                'id': i,
+                'link': "https://image.tmdb.org/t/p/original"+str(data_json['poster_path']),
+                "title": data_json["title"]
+            }
+            movies.append(movie)
+        detail["contenantBased_recommender"] = movies
+
     ####################################### analyse commantaire ################################
     url = urlopen(
         'https://www.imdb.com/title/{}/reviews?spoiler=hide&sort=helpfulnessScore&dir=desc'.format(imdb_id)).read()
@@ -282,11 +342,5 @@ def movie():
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
-=======
-from website import create_app
 
-app = create_app()
 
-if __name__ == '__main__':
-    app.run(debug=True)
->>>>>>> origin
