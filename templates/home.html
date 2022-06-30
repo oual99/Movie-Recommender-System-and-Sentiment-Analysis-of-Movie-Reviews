@@ -8,20 +8,15 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-
-
 </head>
 
 <body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
-
 
     <center>
       <div class="one", style="margin-top: 20px; font-family: Arial, Helvetica, sans-serif;">
         <h1 style="">Movie Recommender System</h1>
       </div>
     </center>
-
-
 
     <form action="/list_movies" method="post">
         <div class="main-search-input-wrap"> 
@@ -32,201 +27,192 @@
             <p><input name="enter" type="submit" class="main-search-button" value="Enter"></p>                                  
           </div>
         </div>  
-        
     </form>
         
         {% if list_movie|length > 0 %}
-
             {% for id,info  in list_movie.items() %}
-          <form action="/movie" method="post">
-            <center> 
-              <div class="searchmovie">
-              <button name="button"  type="submit" value="{{id}}" id="mysubmitbutton"  class="customButton" style="cursor:pointer">
-                <div class="wrapper" >   
-                  <div class="main_card">   
-                    <div class="card_left">
-                      <div class="card_datails">
-                        {% for key,value in info.items() %}
-                            {% if key != 'link' %}
-                              {% if key == 'title' %}
-                              <h1>{{value}}</h1>
-                              {% else %}
-                              <div class="card_cat">
-                                <p class="time">{{key}} : {{value}}</p>
-                              </div>
-                              {% endif %}
-                            {% endif %}
-                        {% endfor %} 
-                      </div>
+                <form action="/movie" method="post">
+                  <center> 
+                    <div class="searchmovie">
+                    <button name="button"  type="submit" value="{{id}}" id="mysubmitbutton"  class="customButton" style="cursor:pointer">
+                      <div class="wrapper" >   
+                        <div class="main_card">   
+                          <div class="card_left">
+                            <div class="card_datails">
+                              {% for key,value in info.items() %}
+                                  {% if key != 'link' %}
+                                    {% if key == 'title' %}
+                                    <h1>{{value}}</h1>
+                                    {% else %}
+                                    <div class="card_cat">
+                                      <p class="time">{{key}} : {{value}}</p>
+                                    </div>
+                                    {% endif %}
+                                  {% endif %}
+                              {% endfor %} 
+                            </div>
+                          </div>
+                          <div class="card_right">
+                            <div class="img_container">
+                                    <img class="locandina"  src={{info["link"]}}>
+                            </div>
+                          </div>
+                        </div>     
+                      </div>  
+                    </button>  
                     </div>
-                    <div class="card_right">
-                      <div class="img_container">
-                      
-                              <img class="locandina"  src={{info["link"]}}>
-                      </div>
-                    </div>
-                  </div>     
-                </div>  
-              </button>  
-              </div>
-            </center>
-            
-          {% endfor %}
+                  </center>
+               {% endfor %}
           {% else %}
             {% if home==0 %}
               <center><h1 style="color:red  ; margin-top: 20%;">Sorry ! we didn't find any movie with this name</h1></center>
-              {% endif %}
-         
-
+            {% endif %}
           {% endif %}
         </form>
 
-
-
     <form action="/movie" method="post">
-      {% if detail %}
-      <style> body{background-image: none; background-color: black;color: aliceblue; padding: 0;margin: 0;padding-bottom: 6rem;font-family: "Montserrat", sans-serif;width: 100%;}</style>
-      <div class="moviebody">
-        <div class="top" style="margin-top: 20%;">
-          <div class="columns">
-
-            <div class="column is-full featured_wrapper p-0">
-              <img class="featured"  width="240"  src={{detail["link"]}}>
-              <div class="title_wrapper" >	
-                <h1 class="title is-1 has-text-white">{{detail["title"]}}</h1>
-                <table>
-                  <tr>
-                  <td style="width:30%">Release date</td>  <th>  {{detail["release date"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Vote average</td>  <th>  {{detail["vote average"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Vote count</td>  <th>  {{detail["vote count"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Runtime</td>  <th>  {{detail["runtime"]}} min</th>
-                  </tr>
-                  <tr>
-                  <td>spoken languages</td>  <th>  {{detail["spoken languages"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Genre</td>  <th>  {{detail["genre"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Production companies</td>  <th>  {{detail["production companies"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Production countries</td>  <th>  {{detail["production countries"]}}</th>
-                  </tr>
-                  <tr>
-                  <td>Director</td>  <th>  {{detail["Director"]}}</th>
-                  </tr>
-                </table>
-                <br>
-                <h2>Overview</h2>
-                <p style="text-indent: 50px;text-align: justify;letter-spacing: 3px;">{{detail["overview"]}}</p>
-              </div>
-            </div>
-          
-
-
-
-
-            <div class="container" style="width: 100%; margin-left: 10%; " >
-              <div class="columns is-multiline p-0 pt-6 last">
-                {% if detail["casts"] %}
-                <div class="column is-full" >
-                  <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">Cast</p>
-                </div>
-                <div class="column is-one-quarter">
-                  {% for i in detail["casts"] %}
-                    <img src={{i["profile_path"]}}>
-                    <span class="has-text-white">{{i["cast_name"]}}</span>
-                  {% endfor %}
-
-                </div>
-                {% endif %}
-              </div>
-            </div>
-
-            <div class="containerr">
-
-              <div class="p-0 pt-6" style="text-align: center; width: 100%;">
-                {% if detail["contenantBased_recommender"] %}
-                <div class="column is-full" style="text-align: left; margin-left: 5%;">
-                  <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">More like this :</p>
-                </div>
-                
-                  {% for i in detail["contenantBased_recommender"] %}
-                    <div class="card mb-5 mr-4 col-lg-2 p-0" style="text-align: center; display: inline-block; overflow: hidden; width: 220px; height: 456px;position: relative; background-color: #DCC1C1;">
-                      <button name="button" type="submit" value={{i['id']}} style="cursor:pointer; padding: 0; border: none;background-image: linear-gradient(#FCCDCD, #DCC1C1);">
-                        <img class="card-img-top" src={{i["link"]}}>
-                      </button>
-                      <div style="margin-top: -49px;">
-                        <span class="has-text-white" style="color:black;font-size: 18px;font-weight: bold;">{{i["title"]}}</span>
-                      </div>
+       {% if detail %}
+            <style> body{background-image: none; background-color: black;color: aliceblue; padding: 0;margin: 0;padding-bottom: 6rem;font-family: "Montserrat", sans-serif;width: 100%;}</style>
+            <div class="moviebody">
+              <div class="top" style="margin-top: 20%;">
+                <div class="columns">
+                  <div class="column is-full featured_wrapper p-0">
+                    <img class="featured"  width="240"  src={{detail["link"]}}>
+                    <div class="title_wrapper" >	
+                      <h1 class="title is-1 has-text-white">{{detail["title"]}}</h1>
+                      <table>
+                        <tr>
+                        <td style="width:30%">Release date</td>  <th>  {{detail["release date"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Vote average</td>  <th>  {{detail["vote average"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Vote count</td>  <th>  {{detail["vote count"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Runtime</td>  <th>  {{detail["runtime"]}} min</th>
+                        </tr>
+                        <tr>
+                        <td>spoken languages</td>  <th>  {{detail["spoken languages"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Genre</td>  <th>  {{detail["genre"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Production companies</td>  <th>  {{detail["production companies"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Production countries</td>  <th>  {{detail["production countries"]}}</th>
+                        </tr>
+                        <tr>
+                        <td>Director</td>  <th>  {{detail["Director"]}}</th>
+                        </tr>
+                      </table>
+                      <br>
+                      <h2>Overview</h2>
+                      <p style="text-indent: 50px;text-align: justify;letter-spacing: 3px;">{{detail["overview"]}}</p>
                     </div>
-                  {% endfor %}
-                {% endif %}
-              </div>
+                  </div>
 
 
 
-              <div class="p-0 pt-6" style="text-align: center; width: 100%;">
-                <div class="column is-full" style="text-align: left; margin-left: 5%;">
-                  <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">You may like this :</p>
-                </div>
-                {% if detail["collaborative_recommender"] %}
-                  {% for i in detail["collaborative_recommender"] %}
-                    <div class="card mb-5 mr-4 col-lg-2 p-0" style="text-align: center; display: inline-block; overflow: hidden; width: 220px; height: 456px;position: relative;background-color: #DCC1C1;">
-                      <button name="button" type="submit" value={{i['id']}} style="cursor:pointer; padding: 0; border: none;background-image: linear-gradient(#FCCDCD, #DCC1C1);">
-                        <img class="card-img-top" src={{i["link"]}}>
-                      </button>
-                      <div style="margin-top: -49px;">
-                        <span class="has-text-white" style="color:black;font-size: 18px;font-weight: bold;">{{i["title"]}}</span>
+
+
+                  <div class="container" style="width: 100%; margin-left: 10%; " >
+                    <div class="columns is-multiline p-0 pt-6 last">
+                      {% if detail["casts"] %}
+                      <div class="column is-full" >
+                        <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">Cast</p>
                       </div>
-                    </div>
-                  {% endfor %}
-                {% endif %}
-              </div>
+                      <div class="column is-one-quarter">
+                        {% for i in detail["casts"] %}
+                          <img src={{i["profile_path"]}}>
+                          <span class="has-text-white">{{i["cast_name"]}}</span>
+                        {% endfor %}
 
-            </div>
-
-
-            
-            <div>
-
-              {% if detail["reviews"]|length > 0 %}
-              <div class="column is-full"  >
-                <p class="has-text-white" style="font-size: 60px;margin-left: 5%;color: #FCCDCD;">Top 10 IMDB reviews</p>
-              </div>
-              <center>
-              <div style="width: 80%; margin-top: -200px; color: black;">
-                  <table  style=" border-collapse: collapse;border-radius: 8px;overflow: hidden;">
-                {% for i in detail["reviews"] %} 
-                    <tr style="background-image: linear-gradient(#FCCDCD, #DCC1C1); font-weight: bold;">
-                      <td style="width:80%; padding: 1em;border-bottom: 2px solid black;">{{i["text"]}}</td>
-                      {% if i["predict"][0] == 1 %}
-                      <td style="color: green; text-align: center; padding: 1em;border-bottom: 2px solid black;"><span>&#128512;</span><span>Positive</span></td>
-                      {% else %}
-                      <td style="color: red; text-align: center; padding: 1em;border-bottom: 2px solid black;"><span>&#128555;</span><span>Negative</span></td>
+                      </div>
                       {% endif %}
-                    </tr>
-                  <p style="width: 90%; float: left;"></p>
-                  
-                  {% endfor %}
-                  </table>
-              </div> 
-               </center>
-              {% endif %}
-            </div>
-            
+                    </div>
+                  </div>
 
-          </div>
+                  <div class="containerr">
 
-        </div>  
-      </div>   
+                   <div class="p-0 pt-6" style="text-align: center; width: 100%;">
+                      {% if detail["contenantBased_recommender"] %}
+                            <div class="column is-full" style="text-align: left; margin-left: 5%;">
+                              <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">More like this :</p>
+                            </div>
+
+                          {% for i in detail["contenantBased_recommender"] %}
+                            <div class="card mb-5 mr-4 col-lg-2 p-0" style="text-align: center; display: inline-block; overflow: hidden; width: 220px; height: 456px;position: relative; background-color: #DCC1C1;">
+                              <button name="button" type="submit" value={{i['id']}} style="cursor:pointer; padding: 0; border: none;background-image: linear-gradient(#FCCDCD, #DCC1C1);">
+                                <img class="card-img-top" src={{i["link"]}}>
+                              </button>
+                              <div style="margin-top: -49px;">
+                                <span class="has-text-white" style="color:black;font-size: 18px;font-weight: bold;">{{i["title"]}}</span>
+                              </div>
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+
+
+
+                    <div class="p-0 pt-6" style="text-align: center; width: 100%;">
+                      <div class="column is-full" style="text-align: left; margin-left: 5%;">
+                        <p class="has-text-white" style="font-size: 60px;color: #FCCDCD;">You may like this :</p>
+                      </div>
+                      {% if detail["collaborative_recommender"] %}
+                        {% for i in detail["collaborative_recommender"] %}
+                          <div class="card mb-5 mr-4 col-lg-2 p-0" style="text-align: center; display: inline-block; overflow: hidden; width: 220px; height: 456px;position: relative;background-color: #DCC1C1;">
+                            <button name="button" type="submit" value={{i['id']}} style="cursor:pointer; padding: 0; border: none;background-image: linear-gradient(#FCCDCD, #DCC1C1);">
+                              <img class="card-img-top" src={{i["link"]}}>
+                            </button>
+                            <div style="margin-top: -49px;">
+                              <span class="has-text-white" style="color:black;font-size: 18px;font-weight: bold;">{{i["title"]}}</span>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                  </div>
+
+
+
+                  <div>
+
+                    {% if detail["reviews"]|length > 0 %}
+                    <div class="column is-full"  >
+                      <p class="has-text-white" style="font-size: 60px;margin-left: 5%;color: #FCCDCD;">Top 10 IMDB reviews</p>
+                    </div>
+                    <center>
+                    <div style="width: 80%; margin-top: -200px; color: black;">
+                        <table  style=" border-collapse: collapse;border-radius: 8px;overflow: hidden;">
+                      {% for i in detail["reviews"] %} 
+                          <tr style="background-image: linear-gradient(#FCCDCD, #DCC1C1); font-weight: bold;">
+                            <td style="width:80%; padding: 1em;border-bottom: 2px solid black;">{{i["text"]}}</td>
+                            {% if i["predict"][0] == 1 %}
+                            <td style="color: green; text-align: center; padding: 1em;border-bottom: 2px solid black;"><span>&#128512;</span><span>Positive</span></td>
+                            {% else %}
+                            <td style="color: red; text-align: center; padding: 1em;border-bottom: 2px solid black;"><span>&#128555;</span><span>Negative</span></td>
+                            {% endif %}
+                          </tr>
+                        <p style="width: 90%; float: left;"></p>
+
+                        {% endfor %}
+                        </table>
+                    </div> 
+                     </center>
+                    {% endif %}
+                  </div>
+
+
+                </div>
+
+              </div>  
+            </div>   
       {% endif %}
       
     </form>
