@@ -12,9 +12,9 @@ from nltk.corpus import stopwords
 import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-# nltk.download('stopwords')
-# nltk.download('wordnet')
-
+nltk.download('stopwords')
+nltk.download('wordnet')
+api_key="your api_key, you can get it from tmdb"
 app = Flask(__name__)
 data_movie = pd.read_csv("data_movies_final.csv")
 top_movies = pd.read_csv("topMovies.csv")
@@ -141,7 +141,7 @@ def list_movies():
     movie_name = request.form["movie_name"]
     reslt = {}
     ########################################## search for movie ######################################
-    url = "https://api.themoviedb.org/3/search/movie?api_key=08e7c1d222c497dbff1a47ee16c5ea0c&language=en-US&query=" + \
+    url = "https://api.themoviedb.org/3/search/movie?api_key="+api_key+"&language=en-US&query=" + \
         str(movie_name)
     url = url.replace("\n", " ").encode('ascii', 'ignore').decode('ascii')
     a = url.replace(" ", "%20").encode('ascii', 'ignore').decode('ascii')
@@ -208,7 +208,7 @@ def movie():
 
     ######################################## movie detail################################
     url = "https://api.themoviedb.org/3/movie/" + \
-        str(button)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+        str(button)+"?api_key="+api_key
 
     response = urlopen(url)
     data_json = json.loads(response.read())
@@ -233,7 +233,7 @@ def movie():
     detail["overview"] = str(data_json["overview"])
     ########################################## director and casts ##################################
     url = "https://api.themoviedb.org/3/movie/" + \
-        str(button)+"/credits?api_key=08e7c1d222c497dbff1a47ee16c5ea0c&language=en-US"
+        str(button)+"/credits?api_key="+api_key+"&language=en-US"
     response = urlopen(url)
     data_json = json.loads(response.read())
     casts = []
@@ -259,7 +259,7 @@ def movie():
         movies = []
         for i in movies_recommended:
             url = "https://api.themoviedb.org/3/movie/" + \
-                str(i)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+                str(i)+"?api_key="+api_key
             response = urlopen(url)
             data_json = json.loads(response.read())
             movie = {
@@ -274,7 +274,7 @@ def movie():
         movies = []
         for j, i in enumerate(movies_recommended):
             url = "https://api.themoviedb.org/3/movie/" + \
-                str(i)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+                str(i)+"?api_key="+api_key
             response = urlopen(url)
             data_json = json.loads(response.read())
             movie = {
@@ -293,7 +293,7 @@ def movie():
         movies = []
         for i in movies_recommended:
             url = "https://api.themoviedb.org/3/movie/" + \
-                str(i)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+                str(i)+"?api_key="+api_key
             response = urlopen(url)
             data_json = json.loads(response.read())
             movie = {
@@ -309,7 +309,7 @@ def movie():
         movies = []
         for i in movies_recommended:
             url = "https://api.themoviedb.org/3/movie/" + \
-                str(i)+"?api_key=08e7c1d222c497dbff1a47ee16c5ea0c"
+                str(i)+"?api_key="+api_key
             response = urlopen(url)
             data_json = json.loads(response.read())
             movie = {
