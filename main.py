@@ -14,7 +14,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 nltk.download('stopwords')
 nltk.download('wordnet')
+
+
+
 api_key="your api_key, you can get it from tmdb"
+
+
+
 app = Flask(__name__)
 data_movie = pd.read_csv("data_movies_final.csv")
 top_movies = pd.read_csv("topMovies.csv")
