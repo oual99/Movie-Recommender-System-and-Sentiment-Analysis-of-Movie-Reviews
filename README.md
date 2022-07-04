@@ -7,8 +7,8 @@ It can be splitted into two main tasks:
 Building a recommendation engine that suggest movies based on how a movie is similar to other movies (Content-based Filtering) and how a user is similar to other users (Collaborative Filtering)  
 Building a sentiment analysis model to predict the sentiment (positive or negative) of movie reviews.
 
-
 ## Project System Design
+ ![image](https://user-images.githubusercontent.com/80493805/177148885-29eb0619-9e5e-4c9e-a8eb-e2df065a950f.png)
 
 As mentioned in the above image, in this project we aim to build a web application using Flask framework in python. 
 The idea beginning the project goes as follow:
