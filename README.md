@@ -1,6 +1,6 @@
-#Movie recommender system
+# Movie recommender system
 
-#Overview
+## Overview
 
 The purpose of this project is to build a Flask web application of a movie recommendation system in addition to apply sentiment analysis on each movie reviews with Python. 
 It can be splitted into two main tasks:
@@ -8,7 +8,7 @@ Building a recommendation engine that suggest movies based on how a movie is sim
 Building a sentiment analysis model to predict the sentiment (positive or negative) of movie reviews.
 
 
-#Project System Design
+## Project System Design
 
 As mentioned in the above image, in this project we aim to build a web application using Flask framework in python. 
 The idea beginning the project goes as follow:
