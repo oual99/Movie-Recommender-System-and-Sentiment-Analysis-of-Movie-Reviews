@@ -3,8 +3,10 @@
 ## Overview
 
 The purpose of this project is to build a Flask web application of a movie recommendation system in addition to apply sentiment analysis on each movie reviews with Python. 
-It can be splitted into two main tasks:
-Building a recommendation engine that suggest movies based on how a movie is similar to other movies (Content-based Filtering) and how a user is similar to other users (Collaborative Filtering)  
+It can be split into two main tasks:
+
+Building a recommendation engine that suggest movies based on how a movie is similar to other movies (Content-based Filtering) and how a user is similar to other users (Collaborative Filtering).
+
 Building a sentiment analysis model to predict the sentiment (positive or negative) of movie reviews.
 
 ## Project System Design
