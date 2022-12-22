@@ -18,3 +18,6 @@ After inserting the movie title by the user, the recommendation system will sugg
 Using TMDB API we receive/gather the information about the movie that the user is looking for and all other suggested movies.
 Scrapp the best reviews from IMDB website.
 Predict each review if it is a positive or a negative one using the sentiment analysis model.
+
+## Demonstration video
+https://mega.nz/file/vIFESZhT#hQuKW0Opiy7vSXjFv33ZiPNB-0TPvFfQ8cHUtF235Ag
